@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design System — Architectural / Branding
+  Logo-driven: orange protagonist on deep black canvas.
+  All colors HSL.
+*/
+
+@layer base {
+  :root {
+    /* Base — deep blacks */
+    --background: 0 0% 5.5%;          /* #0E0E0E */
+    --background-secondary: 0 0% 9%;  /* #171717 */
+    --foreground: 0 0% 96%;           /* #F5F5F5 */
+    --foreground-muted: 0 0% 75%;     /* #BFBFBF */
+
+    --card: 0 0% 9%;                  /* #171717 */
+    --card-foreground: 0 0% 96%;
+    --card-border: 0 0% 16.5%;        /* #2A2A2A */
+
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 96%;
+
+    /* Primary — burnt orange protagonist */
+    --primary: 27 90% 41%;            /* #C96A0A */
+    --primary-foreground: 0 0% 5.5%;
+    --primary-dark: 27 90% 33%;       /* #A55508 */
+    --primary-glow: 28 84% 48%;       /* #E07B14 */
+
+    --secondary: 0 0% 13%;            /* #222 cards alt */
+    --secondary-foreground: 0 0% 96%;
+
+    --muted: 0 0% 11%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 27 90% 41%;
+    --accent-foreground: 0 0% 5.5%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 96%;
+
+    --border: 0 0% 16.5%;             /* #2A2A2A */
+    --input: 0 0% 16.5%;
+    --ring: 27 90% 41%;
+
+    --radius: 0.75rem;                /* 12px cards */
+    --radius-sm: 0.5rem;              /* 8px buttons */
+
+    /* Effects */
+    --gradient-radial: radial-gradient(ellipse at top, hsl(27 90% 41% / 0.08), transparent 60%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --shadow-soft: 0 8px 24px -12px hsl(0 0% 0% / 0.6);
+    --shadow-elevated: 0 20px 60px -20px hsl(0 0% 0% / 0.8);
+    --transition-precise: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-quick: 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+
+    --sidebar-background: 0 0% 5.5%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 27 90% 41%;
+    --sidebar-primary-foreground: 0 0% 5.5%;
+    --sidebar-accent: 0 0% 11%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 16.5%;
+    --sidebar-ring: 27 90% 41%;
+  }
+
+  .dark {
+    /* Same — site is dark-first */
+    --background: 0 0% 5.5%;
+    --foreground: 0 0% 96%;
+  }
+
+  /*
+    Tone system — kept dark-first.
+    The ScrollBackdrop drifts through orange/ember stops but we DO NOT
+    invert foreground (caused unreadable "fade-out" effect). Instead the
+    backdrop stays low-luminance enough that white text remains legible
+    everywhere. Hook is preserved for future use but currently a no-op.
+  */
+  html {
+    transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+
+  ::selection {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .tracking-open { letter-spacing: 0.015em; }
+  .tracking-wide-2 { letter-spacing: 0.02em; }
+
+  /* Crisp video rendering on hi-DPI / 4K displays.
+     Forces GPU compositing layer + high-quality scaling so upscaled
+     video frames stay as sharp as the source allows. */
+  .video-crisp {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+    /* subtle perceptual sharpening to counter browser bilinear upscale */
+    filter: contrast(1.02) saturate(1.03);
+  }
+  .video-crisp video,
+  video.video-crisp {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .bg-radial-glow {
+    background-image: var(--gradient-radial);
+  }
+
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.4) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  .hover-lift {
+    transition: transform var(--transition-precise), box-shadow var(--transition-precise), border-color var(--transition-precise);
+  }
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .draw-stroke {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw 2.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+}
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes mask-reveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(20px, -30px) rotate(8deg); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+  .animate-float-slow {
+    animation: float-slow 14s ease-in-out infinite;
+  }
+  .text-shimmer {
+    background: linear-gradient(90deg,
+      hsl(var(--foreground) / 0.4) 0%,
+      hsl(var(--foreground)) 45%,
+      hsl(var(--primary)) 55%,
+      hsl(var(--foreground) / 0.4) 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  .noise-overlay {
+    position: relative;
+  }
+  .noise-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  .media-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--card-border));
+    background: hsl(var(--card));
+    transition: transform var(--transition-precise), border-color var(--transition-precise);
+  }
+  .media-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, hsl(0 0% 0% / 0.7));
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.85;
+    transition: opacity var(--transition-precise);
+  }
+  .media-frame:hover { border-color: hsl(var(--primary) / 0.6); }
+  .media-frame:hover::before { opacity: 0.4; }
+  .media-frame img {
+    transition: transform 1.4s cubic-bezier(0.22,1,0.36,1), filter var(--transition-precise);
+    will-change: transform;
+  }
+  .media-frame:hover img { transform: scale(1.06); filter: saturate(1.1); }
+
+  .corner-ticks::before,
+  .corner-ticks::after {
+    content: "";
+    position: absolute;
+    width: 14px; height: 14px;
+    border: 1px solid hsl(var(--primary));
+  }
+  .corner-ticks::before { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+  .corner-ticks::after { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+}
