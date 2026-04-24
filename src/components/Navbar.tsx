@@ -43,8 +43,8 @@ export const Navbar = () => {
             </a>
           ))}
         </nav>
-        <Button variant="default" size="sm" className="hidden sm:inline-flex">
-          Falar com a equipe
+        <Button asChild variant="default" size="sm" className="hidden sm:inline-flex">
+          <a href="#contato">Falar com a equipe</a>
         </Button>
       </div>
     </header>

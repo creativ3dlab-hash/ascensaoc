@@ -273,4 +273,53 @@
   }
   .corner-ticks::before { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
   .corner-ticks::after { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+
+  /* Hollow display type — pure outline, no fill, no background bleed.
+     The glyph fill is fully transparent so the page background shows
+     through. Hover reveals an orange fill via a clipped pseudo-element
+     that uses background-clip:text on a duplicate of the text. */
+  .checkmate-outline {
+    position: relative;
+    display: inline-block;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0;
+    background: none;
+    text-shadow:
+      1px 0 0 hsl(var(--foreground)),
+      -1px 0 0 hsl(var(--foreground)),
+      0 1px 0 hsl(var(--foreground)),
+      0 -1px 0 hsl(var(--foreground)),
+      0.7px 0.7px 0 hsl(var(--foreground)),
+      -0.7px 0.7px 0 hsl(var(--foreground)),
+      0.7px -0.7px 0 hsl(var(--foreground)),
+      -0.7px -0.7px 0 hsl(var(--foreground));
+    transition: text-shadow 400ms ease;
+    cursor: default;
+  }
+  .checkmate-outline::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: hsl(var(--primary));
+    -webkit-text-fill-color: hsl(var(--primary));
+    text-shadow: none;
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 700ms cubic-bezier(0.65, 0, 0.35, 1);
+    pointer-events: none;
+  }
+  .checkmate-outline:hover::before { clip-path: inset(0 0 0 0); }
+  .checkmate-outline:hover {
+    text-shadow:
+      1px 0 0 hsl(var(--primary)),
+      -1px 0 0 hsl(var(--primary)),
+      0 1px 0 hsl(var(--primary)),
+      0 -1px 0 hsl(var(--primary)),
+      0.7px 0.7px 0 hsl(var(--primary)),
+      -0.7px 0.7px 0 hsl(var(--primary)),
+      0.7px -0.7px 0 hsl(var(--primary)),
+      -0.7px -0.7px 0 hsl(var(--primary));
+  }
 }

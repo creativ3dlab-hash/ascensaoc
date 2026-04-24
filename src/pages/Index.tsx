@@ -14,6 +14,7 @@ import { Footer } from "@/components/Footer";
 import { NetflixIntro, shouldPlayIntro } from "@/components/NetflixIntro";
 import { ScrollBackdrop } from "@/components/ScrollBackdrop";
 import { StackedSection } from "@/components/StackedSection";
+import { Checkmate } from "@/components/Checkmate";
 
 const Index = () => {
   const [introDone, setIntroDone] = useState(true);
@@ -32,6 +33,7 @@ const Index = () => {
         <StackedSection label="01 / serviços"><Services /></StackedSection>
         <StackedSection label="02 / cases"><Cases /></StackedSection>
         <StackedSection label="03 / diferencial"><Differential /></StackedSection>
+        <StackedSection label="✦ / xeque-mate"><Checkmate /></StackedSection>
         {/* CinematicReveal usa sticky interno — não pode ficar dentro do StackedSection */}
         <CinematicReveal />
         <StackedSection label="04 / jornada"><Journey /></StackedSection>

@@ -182,7 +182,7 @@ export const Hero = () => {
 
           {/* CTA */}
           <a
-            href="#contact"
+            href="#contato"
             className="group inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-foreground/90 hover:text-primary transition-colors border-b border-foreground/40 hover:border-primary pb-2"
           >
             Iniciar projeto

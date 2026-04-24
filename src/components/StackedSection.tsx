@@ -79,20 +79,20 @@ export const StackedSection = ({
     <div
       id={id}
       ref={wrapRef}
-      className={`relative ${className}`}
+      className={`relative pointer-events-none ${className}`}
       style={{ marginTop: `-${travel}vh` }}
     >
       {/* Spacer que cria o curso de scroll para a cortina */}
-      <div style={{ height: `${travel}vh` }} aria-hidden />
+      <div style={{ height: `${travel}vh`, pointerEvents: "none" }} aria-hidden />
 
       {/* Cortina sticky full-screen */}
       <div
         aria-hidden
-        className="sticky top-0 left-0 w-full h-0 pointer-events-none z-40"
+        className="sticky top-0 left-0 w-full h-0 pointer-events-none select-none z-40"
         style={{ marginBottom: 0 }}
       >
         <div
-          className="absolute left-0 right-0 top-0 h-screen overflow-hidden"
+          className="absolute left-0 right-0 top-0 h-screen overflow-hidden pointer-events-none select-none"
           style={{
             transform: `translate3d(0, ${translate}%, 0)`,
             willChange: "transform",
@@ -110,50 +110,43 @@ export const StackedSection = ({
             `,
           }}
         >
-          {/* Brilho radial sutil */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{
               background:
                 "radial-gradient(60% 50% at 50% 50%, hsl(28 84% 58% / 0.55), transparent 70%)",
               mixBlendMode: "screen",
             }}
           />
-          {/* Grão / textura sutil para não parecer flat */}
           <div
-            className="absolute inset-0 opacity-[0.07]"
+            className="absolute inset-0 opacity-[0.07] pointer-events-none"
             style={{
               backgroundImage:
                 "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
               mixBlendMode: "overlay",
             }}
           />
-          {/* Linhas de luz nas bordas */}
           <div
-            className="absolute inset-x-0 top-0 h-px"
+            className="absolute inset-x-0 top-0 h-px pointer-events-none"
             style={{
               background:
                 "linear-gradient(90deg, transparent, hsl(40 100% 75% / 0.9), transparent)",
             }}
           />
           <div
-            className="absolute inset-x-0 bottom-0 h-px"
+            className="absolute inset-x-0 bottom-0 h-px pointer-events-none"
             style={{
               background:
                 "linear-gradient(90deg, transparent, hsl(20 90% 25% / 0.9), transparent)",
             }}
           />
 
-          {/* Label central opcional */}
           {label && (
             <div
-              className="absolute inset-0 flex items-center justify-center"
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
               style={{ opacity: labelOpacity }}
             >
-              <div className="text-center">
-                <div className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-primary-foreground/80 mb-3">
-                  próxima cena
-                </div>
+              <div className="text-center pointer-events-none select-none">
                 <div className="font-display text-3xl md:text-6xl font-bold text-primary-foreground tracking-tight">
                   {label}
                 </div>
@@ -164,7 +157,7 @@ export const StackedSection = ({
       </div>
 
       {/* Conteúdo real da seção */}
-      <div className="relative z-0">{children}</div>
+      <div className="relative z-0 pointer-events-auto">{children}</div>
     </div>
   );
 };
