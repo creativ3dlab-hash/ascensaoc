@@ -81,20 +81,73 @@ export const AmbientPlayer = () => {
     } catch { /* ignore */ }
   }, [volume]);
 
-  // ───── Auto-play after intro finishes ─────
+  // ───── Auto-play strategy ─────
+  // 1) Try to play immediately (works on browsers w/ permissive policy or
+  //    when the page was reopened after the user already interacted).
+  // 2) On the `ac:intro-finished` event — if the intro ended via click/keypress
+  //    that's a real user gesture and play() will succeed synchronously.
+  // 3) Fallback: arm a one-shot listener for the FIRST user gesture anywhere
+  //    on the page (pointerdown / keydown / touchstart / scroll). Since the
+  //    handler runs synchronously inside the gesture, autoplay is allowed.
   useEffect(() => {
-    const tryAutoplay = async () => {
-      const audio = audioRef.current;
-      if (!audio) return;
-      try {
-        await audio.play();
-      } catch {
-        setNeedsAttention(true);
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    let armed = true;
+
+    const playSync = () => {
+      if (!armed || !audioRef.current) return;
+      // Call play() synchronously (no await) so the gesture context is preserved.
+      const p = audioRef.current.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => {
+          armed = false;
+          removeGestureListeners();
+        }).catch(() => {
+          // still blocked — keep listeners armed for the next gesture
+        });
       }
     };
-    const onIntroDone = () => window.setTimeout(tryAutoplay, 750);
+
+    const gestureEvents: (keyof WindowEventMap)[] = [
+      "pointerdown",
+      "keydown",
+      "touchstart",
+      "scroll",
+      "wheel",
+    ];
+
+    const onGesture = () => playSync();
+
+    const addGestureListeners = () => {
+      gestureEvents.forEach((ev) =>
+        window.addEventListener(ev, onGesture, { passive: true, capture: true }),
+      );
+    };
+    const removeGestureListeners = () => {
+      gestureEvents.forEach((ev) =>
+        window.removeEventListener(ev, onGesture, { capture: true } as EventListenerOptions),
+      );
+    };
+
+    const onIntroDone = () => {
+      // Intro just finished — try synchronously first (works if it was skipped
+      // by click/keypress).
+      playSync();
+    };
+
+    // 1) optimistic immediate attempt
+    playSync();
+    // 2) listen for intro-finished
     window.addEventListener("ac:intro-finished", onIntroDone);
-    return () => window.removeEventListener("ac:intro-finished", onIntroDone);
+    // 3) arm gesture fallback
+    addGestureListeners();
+
+    return () => {
+      armed = false;
+      window.removeEventListener("ac:intro-finished", onIntroDone);
+      removeGestureListeners();
+    };
   }, []);
 
   // ───── Close popover on outside click / Esc ─────
