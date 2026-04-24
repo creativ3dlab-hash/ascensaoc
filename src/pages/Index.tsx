@@ -13,6 +13,7 @@ import { Team } from "@/components/Team";
 import { Footer } from "@/components/Footer";
 import { NetflixIntro, shouldPlayIntro } from "@/components/NetflixIntro";
 import { ScrollBackdrop } from "@/components/ScrollBackdrop";
+import { StackedSection } from "@/components/StackedSection";
 
 const Index = () => {
   const [introDone, setIntroDone] = useState(true);
@@ -28,15 +29,16 @@ const Index = () => {
       <Navbar />
       <main>
         <Hero />
-        <Services />
-        <Cases />
-        <Differential />
+        <StackedSection label="01 / serviços"><Services /></StackedSection>
+        <StackedSection label="02 / cases"><Cases /></StackedSection>
+        <StackedSection label="03 / diferencial"><Differential /></StackedSection>
+        {/* CinematicReveal usa sticky interno — não pode ficar dentro do StackedSection */}
         <CinematicReveal />
-        <Journey />
-        <ShowcaseVideo />
-        <Team />
-        <Testimonials />
-        <ContactForm />
+        <StackedSection label="04 / jornada"><Journey /></StackedSection>
+        <StackedSection label="05 / showcase"><ShowcaseVideo /></StackedSection>
+        <StackedSection label="06 / equipe"><Team /></StackedSection>
+        <StackedSection label="07 / depoimentos"><Testimonials /></StackedSection>
+        <StackedSection label="08 / contato"><ContactForm /></StackedSection>
       </main>
       <Footer />
     </div>
