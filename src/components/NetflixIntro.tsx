@@ -20,6 +20,8 @@ export const NetflixIntro = ({ onFinish }: IntroProps) => {
     if (exiting) return;
     setExiting(true);
     sessionStorage.setItem(STORAGE_KEY, "1");
+    // Notify the rest of the app (e.g. AmbientPlayer) that the intro ended.
+    window.dispatchEvent(new CustomEvent("ac:intro-finished"));
     window.setTimeout(() => onFinish(), 700);
   };
 

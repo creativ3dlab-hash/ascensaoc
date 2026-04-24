@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
+import { AmbientPlayer } from "./AmbientPlayer";
 
 const links = [
   { href: "#servicos", label: "Serviços" },
@@ -43,9 +44,12 @@ export const Navbar = () => {
             </a>
           ))}
         </nav>
-        <Button asChild variant="default" size="sm" className="hidden sm:inline-flex">
-          <a href="#contato">Falar com a equipe</a>
-        </Button>
+        <div className="flex items-center gap-3">
+          <AmbientPlayer />
+          <Button asChild variant="default" size="sm" className="hidden sm:inline-flex">
+            <a href="#contato">Falar com a equipe</a>
+          </Button>
+        </div>
       </div>
     </header>
   );
